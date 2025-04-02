@@ -28,7 +28,13 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json(['message' => 'User registered successfully'], 201);
+        $token = $user->createToken('authToken')->accessToken;
+
+        return response()->json([
+            'message' => 'User registered successfully',
+            'User' => $user,
+            'token' => $token
+        ], 201);
     }
 
     public function login(Request $request)
@@ -43,7 +49,9 @@ class AuthController extends Controller
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-            $token = $user->createToken('activityToken')->accessToken;
+
+            /** @var \App\Models\User $user */
+            $token = $user->createToken('authToken')->accessToken;
 
             return response()->json([
                 'message' => 'Loggin successfull',

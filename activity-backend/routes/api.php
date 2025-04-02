@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ActivityController;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 
 Route::get('/user', function (Request $request) {
@@ -17,5 +18,9 @@ Route::group(["prefix" => "v1"], function () {
     Route::group(["prefix" => "guest"], function () {
         Route::post("/register", [AuthController::class, "register"])->name('register');
         Route::post("/login", [AuthController::class, "login"])->name('login');
+    });
+
+    Route::group(["prefix" => "user"], function () {
+        Route::post("/upload-activity-data", [ActivityController::class, "uploadActivityData"]);
     });
 });
